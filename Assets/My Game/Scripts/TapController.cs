@@ -27,13 +27,7 @@ public class TapController : MonoBehaviour {
     void Update() {
 
         if (Input.GetMouseButtonDown(0)){
-            Debug.Log("in mouse down");
-
             transform.rotation = forwardRotation;
-            if(rigidbodyGenji == null)
-            {
-                Debug.Log("RB null");
-            }
             rigidbodyGenji.velocity = Vector3.zero;
             rigidbodyGenji.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
         }
