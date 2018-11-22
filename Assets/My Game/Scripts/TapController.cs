@@ -10,14 +10,14 @@ public class TapController : MonoBehaviour {
     public float tiltSmooth = 2;
     public Vector3 startPos;
 
-    Rigidbody2D rigidbody;
+    Rigidbody2D rigidbodyGenji;
     Quaternion downRotation;
     Quaternion forwardRotation;
 
 
     void start() {
 
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigidbodyGenji = GetComponent<Rigidbody2D>();
         downRotation = Quaternion.Euler(0, 0, -90);
         forwardRotation = Quaternion.Euler(0, 0, 35);
         // rigidbody.simulated = false;
@@ -30,12 +30,12 @@ public class TapController : MonoBehaviour {
             Debug.Log("in mouse down");
 
             transform.rotation = forwardRotation;
-            if(rigidbody == null)
+            if(rigidbodyGenji == null)
             {
                 Debug.Log("RB null");
             }
-            rigidbody.velocity = Vector3.zero;
-            rigidbody.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
+            rigidbodyGenji.velocity = Vector3.zero;
+            rigidbodyGenji.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
         }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, tiltSmooth * Time.deltaTime);
