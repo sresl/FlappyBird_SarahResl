@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class TapController : MonoBehaviour
 {
+    public delegate void PlayerDelegate();
+    public static event PlayerDelegate OnPlayerDied;
+    public static event PlayerDelegate OnPlayerScored;
 
     public float tapForce = 200;
     public float tiltSmooth = 2;
@@ -24,6 +27,34 @@ public class TapController : MonoBehaviour
         forwardRotation = Quaternion.Euler(0, 0, 35);
         // rigidbody.simulated = false;
 
+    }
+
+    void OnEnable()
+    {
+        GameManager.OnGameStarted += OnGameStarted;
+        GameManager.OnGameOverConfirmed += OnGameOverConfirmed;
+
+    }
+
+    void OnDisable()
+    {
+        GameManager.OnGameStarted -= OnGameStarted;
+        GameManager.OnGameOverConfirmed -= OnGameOverConfirmed;
+    }
+
+    void OnGameStarted()
+    {
+        rigidbodyGenji.velocity = Vector3.zero;
+        rigidbodyGenji.simulated = true;
+
+        // Debug.Log("game started"+ rigidbodyGenji.simulated);
+
+    }
+
+    void OnGameOverConfirmed()
+    {
+        transform.localPosition = startPos;
+        transform.rotation = Quaternion.identity;
     }
 
     void Update()
@@ -47,6 +78,7 @@ public class TapController : MonoBehaviour
         {
 
             // register a score event
+            OnPlayerScored();  // event sent to GameManager;
             // play a sound
 
         }
@@ -54,9 +86,10 @@ public class TapController : MonoBehaviour
         if (col.gameObject.tag == "DeadZone")
         {
 
-            //rigidbody.simulated = false;
+            rigidbodyGenji.simulated = false;
 
             // register a dead event
+            OnPlayerDied();  // event sent to GameManager;
             // play a sound
         }
 
